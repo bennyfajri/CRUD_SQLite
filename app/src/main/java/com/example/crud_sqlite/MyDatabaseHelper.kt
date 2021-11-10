@@ -2,11 +2,12 @@ package com.example.crud_sqlite
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
 
-internal class MyDatabaseHelper(val context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class MyDatabaseHelper(val context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private const val DATABASE_NAME = "BookLibrary.db"
@@ -46,5 +47,17 @@ internal class MyDatabaseHelper(val context: Context) : SQLiteOpenHelper(context
         }else{
             Toast.makeText(context, "Added Successfully", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun readAllData(): Cursor? {
+        val query = "SELECT * FROM $TABLE_NAME"
+        val db: SQLiteDatabase = this.readableDatabase
+
+        var cursor: Cursor? = null
+        if(db != null){
+            cursor = db.rawQuery(query, null)
+        }
+        return cursor
+
     }
 }
