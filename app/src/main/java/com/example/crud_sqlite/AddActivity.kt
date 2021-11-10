@@ -12,5 +12,11 @@ class AddActivity : AppCompatActivity() {
         binding = ActivityAddBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.btnAdd.setOnClickListener {
+            val myDB = MyDatabaseHelper(this@AddActivity)
+            myDB.addBook(binding.etTitle.text.toString().trim(),
+                binding.etAuthor.text.toString().trim(),
+                binding.etPages.text.toString().trim().toInt())
+        }
     }
 }
