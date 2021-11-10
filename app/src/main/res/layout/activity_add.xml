@@ -34,7 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Book Pages"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:inputType="number"/>
         <Button
             android:id="@+id/btnAdd"
             android:layout_width="match_parent"
