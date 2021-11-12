@@ -1,8 +1,10 @@
 package com.example.crud_sqlite
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.DialogInterface
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.example.crud_sqlite.databinding.ActivityUpdateBinding
 
 class UpdateActivity : AppCompatActivity() {
@@ -19,13 +21,21 @@ class UpdateActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         getAndSetIntentData()
-        binding.btnUpdate.setOnClickListener {
 
+        val ab = supportActionBar
+        ab?.title = title
+
+
+        binding.btnUpdate.setOnClickListener {
             val myDB = MyDatabaseHelper(this@UpdateActivity)
             title = binding.etTitle.text.trim().toString()
             author = binding.etAuthor.text.trim().toString()
             pages = binding.etPages.text.trim().toString()
             myDB.updateData(id, title, author, pages)
+        }
+
+        binding.btnDelete.setOnClickListener {
+            confirmDialog()
         }
 
     }
@@ -49,5 +59,20 @@ class UpdateActivity : AppCompatActivity() {
         } else {
             Toast.makeText(applicationContext, "No data.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun confirmDialog(){
+        AlertDialog.Builder(this)
+            .setTitle("Delete $title ?")
+            .setMessage("Are you sure want to delete $title ?")
+            .setPositiveButton("Yes", DialogInterface.OnClickListener { dialogInterface, i ->
+                val myDB = MyDatabaseHelper(this@UpdateActivity)
+                myDB.deleteOneData(id)
+                finish()
+            })
+            .setNegativeButton("No", DialogInterface.OnClickListener { dialogInterface, i ->
+                dialogInterface.dismiss()
+            })
+            .show()
     }
 }

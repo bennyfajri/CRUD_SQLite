@@ -1,5 +1,6 @@
 package com.example.crud_sqlite
 
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -75,5 +76,20 @@ class MyDatabaseHelper(val context: Context) : SQLiteOpenHelper(context, DATABAS
         }else{
             Toast.makeText(context, "Successully update", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    fun deleteOneData(row_id: String){
+        val db: SQLiteDatabase = this.writableDatabase
+        val result: Long = db.delete(TABLE_NAME, "_id=?", arrayOf(row_id)).toLong()
+        if(result == (-1).toLong()){
+            Toast.makeText(context, "Failed to delete data", Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(context, "Successfully to delete data", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun deleteAllData(){
+        val db: SQLiteDatabase = this.writableDatabase
+        db.execSQL("DELETE FROM $TABLE_NAME")
     }
 }
