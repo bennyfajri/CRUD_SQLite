@@ -36,10 +36,17 @@ class MainActivity : AppCompatActivity() {
 
         storeDataInArrays()
 
-        customAdapter = CustomAdapter(this@MainActivity)
+        customAdapter = CustomAdapter(this@MainActivity,applicationContext)
         customAdapter.setData(book_id, book_title, book_author, book_page)
         binding.recyclerView.adapter = customAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == 1){
+            recreate()
+        }
     }
 
     fun storeDataInArrays() {

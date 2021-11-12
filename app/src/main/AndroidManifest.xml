@@ -10,10 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CRUD_SQLite">
         <activity
+            android:name=".UpdateActivity"
+            android:exported="true" />
+        <activity
             android:name=".AddActivity"
             android:exported="true"
             android:label="Add Book"
-            android:parentActivityName=".MainActivity"/>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

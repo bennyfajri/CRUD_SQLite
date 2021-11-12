@@ -1,13 +1,15 @@
 package com.example.crud_sqlite
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crud_sqlite.databinding.ItemDataBinding
 
-class CustomAdapter(val context: Context): RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
+class CustomAdapter(val activity: Activity, val context: Context): RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
 
     private var book_id = ArrayList<String>()
     private var book_title = ArrayList<String>()
@@ -25,6 +27,15 @@ class CustomAdapter(val context: Context): RecyclerView.Adapter<CustomAdapter.Vi
             binding.tvTitle.text = book_title[position]
             binding.tvAuthor.text = book_author[position]
             binding.tvPages.text = book_pages[position]
+            binding.cvItem.setOnClickListener {
+                val intent = Intent(context, UpdateActivity::class.java)
+                intent.putExtra("id", book_id[position])
+                intent.putExtra("title", book_title[position])
+                intent.putExtra("author", book_author[position])
+                intent.putExtra("pages", book_pages[position])
+                activity.startActivityForResult(intent, 1)
+            }
+
         }
     }
 

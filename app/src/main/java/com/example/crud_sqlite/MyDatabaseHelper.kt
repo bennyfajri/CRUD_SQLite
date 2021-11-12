@@ -60,4 +60,20 @@ class MyDatabaseHelper(val context: Context) : SQLiteOpenHelper(context, DATABAS
         return cursor
 
     }
+
+    fun updateData(row_id: String, title: String, author: String, pages: String){
+        val db: SQLiteDatabase = this.writableDatabase
+        val cv = ContentValues()
+
+        cv.put(COLUMN_TITLE, title)
+        cv.put(COLUMN_AUTHOR, author)
+        cv.put(COLUMN_PAGES, pages)
+
+        val result: Long = db.update(TABLE_NAME, cv, "_id=?", arrayOf(row_id)).toLong()
+        if((-1).toLong() == result){
+            Toast.makeText(context, "Failed update", Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(context, "Successully update", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
