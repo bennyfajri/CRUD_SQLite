@@ -6,15 +6,13 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.example.crud_sqlite.databinding.ItemDataBinding
 
 class CustomAdapter(val activity: Activity, val context: Context): RecyclerView.Adapter<CustomAdapter.ViewHolder>(){
 
-    private var book_id = ArrayList<String>()
-    private var book_title = ArrayList<String>()
-    private var book_author = ArrayList<String>()
-    private var book_pages = ArrayList<String>()
+   var arrayList = ArrayList<BookModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_data, parent, false)
@@ -22,25 +20,29 @@ class CustomAdapter(val activity: Activity, val context: Context): RecyclerView.
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val book = arrayList[position]
         with(holder){
-            binding.tvID.text = book_id[position]
-            binding.tvTitle.text = book_title[position]
-            binding.tvAuthor.text = book_author[position]
-            binding.tvPages.text = book_pages[position]
+            binding.tvID.text = book.id
+            binding.tvTitle.text = book.title
+            binding.tvAuthor.text = book.author
+            binding.tvPages.text = book.pages
             binding.cvItem.setOnClickListener {
                 val intent = Intent(context, UpdateActivity::class.java)
-                intent.putExtra("id", book_id[position])
-                intent.putExtra("title", book_title[position])
-                intent.putExtra("author", book_author[position])
-                intent.putExtra("pages", book_pages[position])
+                intent.putExtra("id", book.id)
+                intent.putExtra("title", book.title)
+                intent.putExtra("author", book.author)
+                intent.putExtra("pages", book.pages)
                 activity.startActivityForResult(intent, 1)
             }
+            //Animate Recyclerview
+            val translateAnim = AnimationUtils.loadAnimation(context, R.anim.translate_anim)
+            binding.cvItem.animation = translateAnim
 
         }
     }
 
     override fun getItemCount(): Int {
-        return book_id.size
+        return arrayList.size
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -48,14 +50,8 @@ class CustomAdapter(val activity: Activity, val context: Context): RecyclerView.
     }
 
     fun setData(
-        nBook_id: ArrayList<String>,
-        nBook_title: ArrayList<String>,
-        nBook_author: ArrayList<String>,
-        nBook_pages: ArrayList<String>,
+        newList: ArrayList<BookModel>
     ){
-        book_id = nBook_id
-        book_title = nBook_title
-        book_author = nBook_author
-        book_pages = nBook_pages
+       arrayList = newList
     }
 }

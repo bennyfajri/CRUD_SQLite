@@ -18,11 +18,8 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var myDB: MyDatabaseHelper
-    lateinit var book_id: ArrayList<String>
-    lateinit var book_title:ArrayList<String>
-    lateinit var book_author:ArrayList<String>
-    lateinit var book_page:ArrayList<String>
     lateinit var customAdapter: CustomAdapter
+    var arrayList = ArrayList<BookModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,36 +32,35 @@ class MainActivity : AppCompatActivity() {
         }
 
         myDB = MyDatabaseHelper(this@MainActivity)
-        book_id = ArrayList()
-        book_title = ArrayList()
-        book_author = ArrayList()
-        book_page = ArrayList()
-
         storeDataInArrays()
 
-        customAdapter = CustomAdapter(this@MainActivity,applicationContext)
-        customAdapter.setData(book_id, book_title, book_author, book_page)
+        customAdapter = CustomAdapter(this@MainActivity, applicationContext)
+        customAdapter.setData(arrayList)
         binding.recyclerView.adapter = customAdapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 1){
+        if (requestCode == 1) {
             recreate()
         }
     }
 
     fun storeDataInArrays() {
         val cursor: Cursor? = myDB.readAllData()
-        if(cursor?.count == 0){
+        if (cursor?.count == 0) {
             binding.lnNotFound.visibility = View.VISIBLE
-        }else{
-            while (cursor!!.moveToNext()){
-                book_id.add(cursor.getString(0))
-                book_title.add(cursor.getString(1))
-                book_author.add(cursor.getString(2))
-                book_page.add(cursor.getString(3))
+        } else {
+            while (cursor!!.moveToNext()) {
+                arrayList.add(
+                    BookModel(
+                        cursor.getString(0),
+                        cursor.getString(1),
+                        cursor.getString(2),
+                        cursor.getString(3)
+                    )
+                )
             }
             binding.lnNotFound.visibility = View.GONE
         }
@@ -77,13 +73,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.delete_all){
+        if (item.itemId == R.id.delete_all) {
             confirmDialog()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun confirmDialog(){
+    fun confirmDialog() {
         AlertDialog.Builder(this)
             .setTitle("Delete All Data")
             .setMessage("Are you sure want to delete all data?")
